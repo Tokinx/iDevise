@@ -37,46 +37,53 @@
 					the_content();
 				} }; ?>
 			</article>
-<section class="ending">
-<?php if(get_the_author_meta('weibo')||get_the_author_meta('tencent')||get_the_author_meta('douban')||get_the_author_meta('zhihu')||get_the_author_meta('github')){ ?>
-<ul class="sns">
-<?php if(get_the_author_meta('weibo')){ ?>
-<li class="weibo"><a href="<?php the_author_meta('weibo');?>" target="_blank"><i class="iconfont">&#xe600;</i></a></li>
-<?php }; if(get_the_author_meta('tencent')){ ?>
-<li class="tencent"><a href="http://wpa.qq.com/msgrd?v=3&uin=<?php the_author_meta('tencent');?>&site=qq&menu=yes" target="_blank"><i class="iconfont">&#xe601;</i></a></li>
-<?php }; if(get_the_author_meta('douban')){ ?>
-<li class="douban"><a href="<?php the_author_meta('douban');?>" target="_blank"><i class="iconfont">&#xe602;</i></a></li>
-<?php }; if(get_the_author_meta('zhihu')){ ?>
-<li class="zhihu"><a href="<?php the_author_meta('zhihu');?>" target="_blank"><i class="iconfont">&#xe603;</i></a></li>
-<?php }; if(get_the_author_meta('github')){ ?>
-<li class="github"><a href="<?php the_author_meta('github');?>" target="_blank"><i class="iconfont">&#xe611;</i></a></li>
-<?php };?>
-</ul>
-<?php };?>
-    
-<?php if(get_the_author_meta('alipay')||get_the_author_meta('wechatpay')){ ?>
-<div class="reward">
-打
-<ul>
-<?php if(get_the_author_meta('alipay')){ ?>
-<li><img src="<?php the_author_meta('alipay');?>">用支付宝打我</li>
-<?php }; if(get_the_author_meta('wechatpay')){ ?>
-<li><img src="<?php the_author_meta('wechatpay');?>">用微信打我</li>
-<?php };?>
-</ul>
-</div>
-<?php }?>
+            <section class="ending">
+                <?php if(get_theme_mod('biji_other_weibo')||get_theme_mod('biji_other_qq')||get_theme_mod('biji_other_douban')||get_theme_mod('biji_other_zhihu')||get_theme_mod('biji_other_github')){ ?>
+                <ul class="sns">
+                    <?php if(get_theme_mod('biji_other_weibo')){ ?>
+                    <li class="weibo"><a href="<?php echo get_theme_mod('biji_other_weibo');?>" target="_blank"><i class="iconfont">&#xe600;</i></a></li>
+                    <?php }; if(get_theme_mod('biji_other_qq')){ ?>
+                    <li class="tencent"><a href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo get_theme_mod('biji_other_qq');?>&site=qq&menu=yes" target="_blank"><i class="iconfont">&#xe601;</i></a></li>
+                    <?php }; if(get_theme_mod('biji_other_douban')){ ?>
+                    <li class="douban"><a href="<?php echo get_theme_mod('biji_other_douban');?>" target="_blank"><i class="iconfont">&#xe602;</i></a></li>
+                    <?php }; if(get_theme_mod('biji_other_zhihu')){ ?>
+                    <li class="zhihu"><a href="<?php echo get_theme_mod('biji_other_zhihu');?>" target="_blank"><i class="iconfont">&#xe603;</i></a></li>
+                    <?php }; if(get_theme_mod('biji_other_github')){ ?>
+                    <li class="github"><a href="<?php echo get_theme_mod('biji_other_github');?>" target="_blank"><i class="iconfont">&#xe611;</i></a></li>
+                    <?php };?>
+                </ul>
+                <?php };?>
+                    
+                <?php if(get_option('biji_other_pay_wexpay') || get_option('biji_other_pay_wexpay')){ ?>
+                <div class="reward">
+                打
+                <ul>
+                    <?php if(get_option('biji_other_pay_wexpay')){ ?>
+                    <li><img src="<?php echo get_option('biji_other_pay_wexpay');?>">用支付宝打我</li>
+                    <?php }; if(get_option('biji_other_pay_wexpay')){ ?>
+                    <li><img src="<?php echo get_option('biji_other_pay_wexpay');?>">用微信打我</li>
+                    <?php };?>
+                </ul>
+                </div>
+                <?php }?>
 
-<div class="about">
-<?php echo get_avatar(get_the_author_email(),'80');?>
-<p><?php the_author_meta('description');?></p>
-</div>
-</section>
+                <div class="about">
+                    <?php echo get_avatar(get_the_author_email(),'80');?>
+                    <p><?php the_author_meta('description');?></p>
+                </div>
+            </section>
         
 		<?php comments_template(); }
 		else {if (have_posts()):while (have_posts()): the_post() ?>
             <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-                <div class="icon"><img src="<?php echo esc_url( Bing_crop_thumbnail( get_content_first_image(get_the_content()),110,110) ) ; ?>"/><i class="iconfont">&#xe605;</i></div>
+                <div class="icon">
+                <?php if (post_thumbnail(110, 110)){ ?>
+                    <img src="<?php echo post_thumbnail(110, 110); ?>" srcset="<?php echo post_thumbnail(220, 220); ?> 2x"/>
+                <?php }else{
+                    echo '<i class="iconfont">&#xe605;</i>';
+                }?>
+                    
+                </div>
                 <h2 itemprop="name headline" class="title"><a href="<?php the_permalink();?>"><?php the_title();?></a></h2>
                 <div class="p_time"><?php the_time('Y-m-d') ?></div>
                 <p><?php echo mb_strimwidth(strip_shortcodes(strip_tags(apply_filters('the_content', $post->post_content))), 0, 220,"...");?></p>
@@ -102,21 +109,42 @@
 <section class="links_adlink">
 <ul class="container">
 <?php error_reporting(0);
-$tip = the_author_meta('mylinks');
-$tip = str_replace("\r","",$tip);
-$tips = explode("\n",$tip);
-if(is_array($tips)){foreach($tips as $tip){$str .= $tip."\n";}echo $str;}
-?>
+    $tip = str_replace("\r", "", get_theme_mod('biji_config_links'));
+    $tips = explode("\n", $tip);
+    if (is_array($tips)) {
+        foreach($tips as $tip) $str .= $tip."\n";
+        echo $str;
+}?>
 </ul>
 </section>
-Theme is iDevise by <a target="_blank" href="http://www.idevs.cn/">Tokin</a><br/>
+Theme is iDevise by <a target="_blank" href="https://biji.io/">Tokin</a><br/>
 &copy; <?php echo date('Y'); ?> <a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?></a>
 <?php if(get_option( 'zh_cn_l10n_icp_num' )){?> . <?php echo get_option( 'zh_cn_l10n_icp_num' );}?>
 <a class="back2top"></a>
 </footer>
-<?php wp_footer();if(get_the_author_meta('my_code')) echo "<div style=\"display:none\">".get_the_author_meta('my_code')."</div>\n";
-echo "<script style=\"display:none\">\nfunction index_overloaded(){\n".get_the_author_meta('ol_code')."\n}\n</script>\n"?>
-<script type='text/javascript' src="//cdn.bootcss.com/jquery/3.0.0-beta1/jquery.min.js"></script>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/functions.js"></script>
+<?php wp_footer();
+echo "<script style=\"display:none\">\nfunction index_overloaded(){\n".get_theme_mod('biji_config_overcode')."\n}\n</script>\n"?>
+<script src='//cdn.bootcss.com/jquery/3.1.1/jquery.min.js'></script>
+<script src="<?php bloginfo('template_directory'); ?>/functions.js"></script>
+<script>
+<?php
+if(get_theme_mod('biji_config_pjax')){
+echo "//页面ajax
+    $('body').on('click',pjax_a,
+    function() {
+        ajax($(this).attr('href'), 'pagelink');
+        return false;
+    });\n";
+}
+if(get_theme_mod('biji_config_pjax_search')){
+echo "//搜索ajax
+    $('body').on('submit',pjax_form, 
+    function() {
+        ajax(this.action + '?s=' + $(this).find(pjax_key).val(), 'search'); 
+        return false;
+    });";
+}
+?>
+</script>
 </body>
 </html>

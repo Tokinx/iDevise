@@ -2,89 +2,118 @@
 /* 
 Theme: iDevise 1
 Name: 设计笔记 Devise 系列主题
-Site: http://www.idevs.cn
+Site: http://biji.io
 */
 require get_template_directory() . '/ajax-comment/do.php';//ajax评论
 function dopt($e){return stripslashes(get_option($e));}
 //---- 主题设置接口 -
-add_action( 'show_user_profile', 'extra_user_profile_fields' );
-add_action( 'edit_user_profile', 'extra_user_profile_fields' );
-function extra_user_profile_fields( $user ) { ?>
-<h3>主题设置</h3>
-<table class="form-table">
 
-<tr>
-<th><label for="alipay">支付宝</label></th>
-<td><input type="text" name="alipay" id="alipay" value="<?php esc_attr_e( get_the_author_meta( 'alipay', $user->ID ) ); ?>" placeholder="用于收款二维码图片地址" class="regular-text">
-</td>
-</tr>
-<tr>
-<th><label for="wechatpay">微信</label></th>
-<td><input type="text" name="wechatpay" id="wechatpay" value="<?php esc_attr_e( get_the_author_meta( 'wechatpay', $user->ID ) ); ?>" placeholder="用于收款二维码图片地址" class="regular-text">
-</td>
-</tr>
+/**
+ * 主题设置选项
+ *
+ * 转移自 `functions.php`。
+ */
+function theme_customize_register( $wp_customize ) {
+    $wp_customize->add_section('biji_config',array(
+        'title'     => '基本设置',
+        'priority'  => 102
+    ) );
+    $wp_customize->add_setting( 'biji_config_pjax', array(
+        'default' => '',
+    ) );
+    $wp_customize->add_setting( 'biji_config_pjax_search', array(
+        'default' => '',
+    ) );
+    $wp_customize->add_setting( 'biji_config_links', array(
+        'default' => '&lt;li&gt;&lt;a target="_blank" href="http://biji.io/"&gt;设计笔记&lt;/a&gt;&lt;/li&gt;',
+    ) );
+    $wp_customize->add_setting( 'biji_config_overcode', array(
+        'default' => '//一般放置统计代码 或者 需要在页面载入重新夹在的js代码',
+    ) );
+//-|------------
+    $wp_customize->add_control( 'biji_config_pjax', array(
+        'label' => __( '是否启用PJAX ', 'Bing' ),
+        'section' => 'biji_config',
+        'type' => 'checkbox'
+    ) );
+    $wp_customize->add_control( 'biji_config_pjax_search', array(
+        'label' => __( '是否启用PJAX搜索 ', 'Bing' ),
+        'section' => 'biji_config',
+        'type' => 'checkbox'
+    ) );
+    $wp_customize->add_control( 'biji_config_links', array(
+        'label' => __( '友情链接', 'Bing' ),
+        'section' => 'biji_config',
+        'type' => 'textarea'
+    ) );
+    $wp_customize->add_control( 'biji_config_overcode', array(
+        'label' => __( '需要重载的代码', 'Bing' ),
+        'section' => 'biji_config',
+        'type' => 'textarea'
+    ) );
+    
+    
+    $wp_customize->add_section('biji_other',array(
+        'title'     => '其它设置',
+        'priority'  => 103
+    ) );
+    $wp_customize->add_setting( 'biji_other_pay_alipay', array(
+        'default'   => '',
+        'transport' => 'postMessage',
+        'type'      => 'option'
+    ) );
+    $wp_customize->add_setting( 'biji_other_pay_wexpay', array(
+        'default'   => '',
+        'transport' => 'postMessage',
+        'type'      => 'option'
+    ) );
+    $wp_customize->add_setting( 'biji_other_weibo', array(
+        'default' => '',
+    ) );
+    $wp_customize->add_setting( 'biji_other_qq', array(
+        'default' => '',
+    ) );
+    $wp_customize->add_setting( 'biji_other_douban', array(
+        'default' => '',
+    ) );
+    $wp_customize->add_setting( 'biji_other_zhihu', array(
+        'default' => '',
+    ) );
+    $wp_customize->add_setting( 'biji_other_github', array(
+        'default' => '',
+    ) );
+//-|------------
+    $wp_customize->add_control( 'biji_other_weibo', array(
+        'label'    => '新浪微博',
+        'section'  => 'biji_other'
+    ) );
+    $wp_customize->add_control( 'biji_other_qq', array(
+        'label'    => '腾讯QQ',
+        'section'  => 'biji_other'
+    ) );
+    $wp_customize->add_control( 'biji_other_douban', array(
+        'label'    => '豆瓣',
+        'section'  => 'biji_other'
+    ) );
+    $wp_customize->add_control( 'biji_other_zhihu', array(
+        'label'    => '知乎',
+        'section'  => 'biji_other'
+    ) );
+    $wp_customize->add_control( 'biji_other_github', array(
+        'label'    => 'GitHub',
+        'section'  => 'biji_other'
+    ) );
+    $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'biji_other_pay_alipay', array(
+        'label'     => '支付宝收款',
+        'section'   => 'biji_other'
+    ) ) );
+    $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'biji_other_pay_wexpay', array(
+        'label'     => '微信收款',
+        'section'   => 'biji_other'
+    ) ) );
 
-<tr>
-<th><label for="weibo">新浪微博</label></th>
-<td><input type="text" name="weibo" id="weibo" value="<?php esc_attr_e( get_the_author_meta( 'weibo', $user->ID ) ); ?>" class="regular-text"></td>
-</tr>
-<tr>
-<th><label for="tencent">腾讯QQ</label></th>
-<td><input type="text" name="tencent" id="tencent" value="<?php esc_attr_e( get_the_author_meta( 'tencent', $user->ID ) ); ?>" class="regular-text"></td>
-</tr>
-<tr>
-<th><label for="douban">豆瓣</label></th>
-<td><input type="text" name="douban" id="douban" value="<?php esc_attr_e( get_the_author_meta( 'douban', $user->ID ) ); ?>" class="regular-text"></td>
-</tr>
-<tr>
-<th><label for="zhihu">知乎</label></th>
-<td><input type="text" name="zhihu" id="zhihu" value="<?php esc_attr_e( get_the_author_meta( 'zhihu', $user->ID ) ); ?>" class="regular-text"></td>
-</tr>
-<tr>
-<th><label for="github">GitHub</label></th>
-<td><input type="text" name="github" id="github" value="<?php esc_attr_e( get_the_author_meta( 'github', $user->ID ) ); ?>" class="regular-text"></td>
-</tr>
-
-<tr>
-<th><label for="mylinks">友情链接</label></th>
-<td>
-<textarea name="mylinks" id="mylinks" rows="5" cols="30"><?php esc_attr_e( get_the_author_meta( 'mylinks', $user->ID ) ); ?></textarea>
-<p class="description">每行一条，例：<br/><code>&lt;li&gt;&lt;a target="_blank" href="http://idevs.cn/"&gt;设计笔记&lt;/a&gt;&lt;/li&gt;</code></p>
-</td>
-</tr>
-<tr>
-<th><label for="ol_code">需要重载的代码</label></th>
-<td>
-<textarea name="ol_code" id="ol_code" rows="5" cols="30"><?php esc_attr_e( get_the_author_meta( 'ol_code', $user->ID ) ); ?></textarea>
-<p class="description">可以使用CNZZ、百度统计、腾讯分析的统计代码，也可以放置需要重载的js代码（页脚隐藏）。</p>
-</td>
-</tr>
-<tr>
-<th><label for="my_code">自定义代码或引用</label></th>
-<td>
-<textarea name="my_code" id="my_code" rows="5" cols="30"><?php esc_attr_e( get_the_author_meta( 'my_code', $user->ID ) ); ?></textarea>
-<p class="description">可以放置css、js脚本，也可以引入第三方js或者css样式（此处代码不会被重载且页脚隐藏）。</p>
-</td>
-</tr>
-</table>
-<?php }
-add_action( 'personal_options_update', 'save_extra_user_profile_fields' );
-add_action( 'edit_user_profile_update', 'save_extra_user_profile_fields' );
-function save_extra_user_profile_fields( $user_id ) {
-	if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
-	//更新
-	update_usermeta( $user_id, 'alipay', $_POST['alipay'] );
-	update_usermeta( $user_id, 'wechatpay', $_POST['wechatpay'] );
-	update_usermeta( $user_id, 'weibo', $_POST['weibo'] );
-	update_usermeta( $user_id, 'tencent', $_POST['tencent'] );
-	update_usermeta( $user_id, 'douban', $_POST['douban'] );
-	update_usermeta( $user_id, 'zhihu', $_POST['zhihu'] );
-	update_usermeta( $user_id, 'github', $_POST['github'] );
-	update_usermeta( $user_id, 'mylinks', $_POST['mylinks'] );
-	update_usermeta( $user_id, 'ol_code', $_POST['ol_code'] );
-	update_usermeta( $user_id, 'my_code', $_POST['my_code'] );
 }
-//---- 主题设置结束 -
+add_action( 'customize_register', 'theme_customize_register' );
 
 // 注册菜单
 if (function_exists('register_nav_menus')){
@@ -326,48 +355,47 @@ wp_mail( $to, $subject, $message, $headers );
 }
 };
 // 缩略图技术 by：http://www.bgbk.org
-if( !defined( 'THEME_THUMBNAIL_PATH' ) ) define( 'THEME_THUMBNAIL_PATH', '/cache/theme-thumbnail' );
-function Bing_build_empty_index( $path ){
-	$index = $path . '/index.php';
-	if( is_file( $index ) ) return;
-	wp_mkdir_p( $path );
-	file_put_contents( $index, "<?php\n// Silence is golden.\n" );
+if( !defined( 'THEME_THUMBNAIL_PATH' ) ) define( 'THEME_THUMBNAIL_PATH', '/cache/theme-thumbnail' ); //存储目录
+function biji_build_empty_index( $path ){ //生成空白首页
+    $index = $path . '/index.php';
+    if( is_file( $index ) ) return;
+    wp_mkdir_p( $path );
+    file_put_contents( $index, "<?php\n// Silence is golden.\n" );
 }
-function Bing_crop_thumbnail( $url, $width, $height = null ){
-	$width = (int) $width;
-	$height = empty( $height ) ? $width : (int) $height;
-	$hash = md5( $url );
-	$file_path = WP_CONTENT_DIR . THEME_THUMBNAIL_PATH . "/$hash-$width-$height.jpg";
-	$file_url = content_url( THEME_THUMBNAIL_PATH . "/$hash-$width-$height.jpg" );
-	if( is_file( $file_path ) ) return $file_url;
-	$editor = wp_get_image_editor( $url );
-	if( is_wp_error( $editor ) ) return $url;
-	$size = $editor->get_size();
-	if( !$dims = image_resize_dimensions( $size['width'], $size['height'], $width, $height, true ) ) return $url;
-	$cmp_x = $size['width'] / $width;
-	$cmp_y = $size['height'] / $height;
-	$cmp = min( $cmp_x, $cmp_y );
-	$min_width = round( $width * $cmp );
-	$min_height = round( $height * $cmp );
-	$crop = $editor->crop( $dims[2], $dims[3], $min_width, $min_height, $width, $height );
-	if( is_wp_error( $crop ) ) return $url;
-	Bing_build_empty_index( WP_CONTENT_DIR . THEME_THUMBNAIL_PATH );
-	$save = $editor->save( $file_path, 'image/jpg' );
-	return is_wp_error( $save ) ? $url : $file_url;
+function biji_crop_thumbnail( $url, $width, $height = null ){ //裁剪图片
+    $width = (int) $width;
+    $height = empty( $height ) ? $width : (int) $height;
+    $hash = md5( $url );
+    $file_path = constant( 'WP_CONTENT_DIR' ) . constant( 'THEME_THUMBNAIL_PATH' ) . "/$hash-$width-$height.jpg";
+    $file_url = content_url( constant( 'THEME_THUMBNAIL_PATH' ) . "/$hash-$width-$height.jpg" );
+    if( is_file( $file_path ) ) return $file_url;
+    $editor = wp_get_image_editor( $url );
+    if( is_wp_error( $editor ) ) return $url;
+    $size = $editor->get_size();
+    $dims = image_resize_dimensions( $size['width'], $size['height'], $width, $height, true );
+    //if( !$dims ) return $url;
+    $cmp = min( $size['width'] / $width, $size['height'] / $height );
+    if( is_wp_error( $editor->crop( $dims[2], $dims[3], $width * $cmp, $height * $cmp, $width, $height ) ) ) return $url;
+    biji_build_empty_index( constant( 'WP_CONTENT_DIR' ) . constant( 'THEME_THUMBNAIL_PATH' ) );
+    return is_wp_error( $editor->save( $file_path, 'image/jpg' ) ) ? $url : $file_url;
 }
-function Bing_add_support_post_thumbnails(){
-	add_theme_support( 'post-thumbnails' );
-}
-add_action( 'after_setup_theme', 'Bing_add_support_post_thumbnails' );
-// 获取文章第一张图片
-function get_content_first_image($content){
-	if ( $content === false ) $content = get_the_content(); 
-	preg_match_all('|<img.*?src=[\'"](.*?)[\'"].*?>|i', $content, $images);
-	if($images){
-		return $images[1][0];
-	}else{
-		return false;
-	}
+//缩略图获取post_thumbnail
+function post_thumbnail($width = 275,$height = 170 )
+{
+    global $post;
+    //如果有特色图片则取特色图片
+    if( has_post_thumbnail( $post->ID ) ){
+        $thumbnail_ID = get_post_thumbnail_id( $post->ID );
+        $thumbnailsrc = wp_get_attachment_image_src( $thumbnail_ID, 'full' );
+        return biji_crop_thumbnail($thumbnailsrc[0],$width,$height);
+    } else {
+        $content = $post->post_content;
+        preg_match_all('/<img.*?(?: |\\t|\\r|\\n)?src=[\'"]?(.+?)[\'"]?(?:(?: |\\t|\\r|\\n)+.*?)?>/sim', $content, $strResult, PREG_PATTERN_ORDER);
+        if(count($strResult[1]) > 0) return biji_crop_thumbnail($strResult[1][0],$width,$height);
+        else{
+            return false;
+        }
+    }
 }
 // 读者墙
 if(!function_exists("deep_in_array")) {
@@ -592,7 +620,7 @@ class ThemeUpdate {
 endif;
 $mytheme_update_checker = new ThemeUpdateChecker(
 	'iDevise',
-	'http://www.idevs.cn/idevise/update.json'
+	'https://biji.io/idevise/update.json'
 );
 // 全部配置完毕
 ?>

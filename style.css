@@ -1,11 +1,11 @@
 @charset "utf-8";
 /* 
   Theme Name: iDevise
-  Theme URL: http://www.idevs.cn
+  Theme URL: http://biji.io
   Description: 长期支援版本。
   Author: Tokin
-  Author URI: http://www.idevs.cn
-  Version: 1.8.1
+  Author URI: http://biji.io
+  Version: 2.0.0
 */
 
 /* 初始化 */
@@ -37,7 +37,9 @@ img{border:0;max-width:100%;}
 .container{margin:auto;max-width:860px;width:96%;}
 .left{float:left;}
 .right{float:right;}
-
+::-webkit-scrollbar-track-piece{background-color:#fff;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:#666;border-left:2px solid #fff;border-right:2px solid #fff}
 /* 页头 */
 #header{width:100%;height:120px;background:#fff;}
 #header:before{content:'';position:absolute;height:1px;top:120px;left:0;right:0;background:#eee}
@@ -77,7 +79,7 @@ img{border:0;max-width:100%;}
 .post-list .icon{position:absolute;width:55px;height:55px;top:4px;left:0px;padding:1px;border-radius:100px;box-shadow: 0 0 0 1px #eee,0 3px 3px -1px #eee;}
 .post-list .icon:after{content:'';position:absolute;width:1px;top:25%;height:50%;right:-14px;background:#eee;}
 .post-list .icon i{position:absolute;left:3px;right:0;top:4px;color:#ccc;text-align:center;font-size:26px;line-height:50px;z-index:0;}
-.post-list .icon img{border-radius:100px;position:relative;z-index:1;}
+.post-list .icon img{border-radius:100px;position:relative;z-index:1;width:100%;height:100%;}
 
 .post-list h2.title{font-size:22px;margin:0 0 0 80px;position:relative;z-index:1;overflow:hidden;}
 .post-list h2.title a{padding:0 10px 0 0;}
@@ -110,12 +112,9 @@ h2.s_title:after{position:absolute;content:"";height:1px;width:30%;background:#e
 .single ul li{list-style-type:disc;}
 .single strong{font-weight:bold;color:#000;background:#eee;border-radius:3px;padding:0 2px;}
 .single hr{border:none;height:1px;background:#eee;margin:50px 30%;}
-.single pre{padding:0 20px;position:relative;border:1px solid #eee;}
-.single pre:before,.single pre:after{display:block;padding:10px 0;color:#f55;}
-.single pre:before{content:"-- [ CODE ] --";border-bottom:1px solid #eee;}
-.single pre:after{content:"-- [ EOF ] --";border-top:1px solid #eee;text-align:right}
-.single code{padding:2px 4px;background:#fafafa;}
-.single pre code{display:block;overflow:auto;max-height:240px;padding:10px 20px;background:none;font-size:13px}
+.single pre code{display:block;overflow:auto;max-height:18em;font-size:14px;line-height:26px;padding:1em;margin:1em 0;background:#333;border-radius:0;white-space: pre-wrap;word-wrap: break-word;}
+.single code{padding:2px 4px;background:#eee;box-shadow:0 0 0 1px rgba(0,0,0,.1) inset;border-radius:3px;color:#2aa;}
+.single code{font-family:"Verdana","Courier New","Trebuchet MS","Helvetica",sans-serif;}
 .single table{border-bottom:1px solid #504F4F;border-right:1px solid #504F4F;border-collapse:collapse;border-spacing:0;margin:0 0 20px;width:100%;}
 .single th{font-size:14px;font-weight:bold;}
 .single th,.single td{border-top:1px solid #504F4F;padding:6px 10px 6px 6px;border-left:1px solid #504F4F;}
@@ -128,6 +127,54 @@ h2.s_title:after{position:absolute;content:"";height:1px;width:30%;background:#e
 .single div.img img{width:100%;margin:auto;}
 .single div.img_3 img{width:33.333333%;float:left;margin:0;}
 .single div.img_2 img{width:50%;float:left;margin:0;}
+
+.gallery{
+ margin:-1%!important;
+}
+.gallery .gallery-item {
+ padding:1%;
+ /* width:14.66666%!important; */
+ margin: 0 !important;
+ overflow:hidden;
+ position:relative;
+}
+.gallery-columns-3 .gallery-item{
+ width:33.3333333%!important;
+}
+.gallery .gallery-item dt:before {
+ content: "";
+ display: block;
+ padding-top: 100%;
+}
+.gallery .gallery-item dt {
+ position: relative;
+ box-shadow:0 0 0 1px rgba(0,0,0,.1) inset;
+ background: #eee;
+ cursor: pointer;
+ overflow: hidden;
+}
+.gallery .gallery-item a {
+ position: absolute;
+ top: 0;
+ right: 0;
+ bottom: 0;
+ left: 0;
+ opacity: 1;
+ -webkit-transition: opacity .1s;
+ transition: opacity .1s;
+ transform: translate(50%,50%);
+}
+.gallery .gallery-item img{
+ margin:0;
+ position:absolute;
+ top: 0;
+ left: 0;
+ max-height:100%;
+ max-width:none!important;
+ width:auto!important;
+ border:0!important;
+ transform: translate(-50%,-50%);
+}
 
 .ending{display:block;width:100%;height:60px;margin:30px 0;border-top:1px dashed #ddd;border-bottom:1px dashed #ddd;position:relative;}
 /* 赏赐 */
