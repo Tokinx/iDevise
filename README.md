@@ -12,7 +12,7 @@
 
 ## 界面演示
 
-![DEMO](https://ws1.sinaimg.cn/large/76679337gy1fc0c4pkurrj21hc0u0jyl)
+![DEMO](https://ws1.sinaimg.cn/large/76679337gy1fc0c4pkurrj21hc0u0jyl.jpg)
 
 ## 更新历史
 
